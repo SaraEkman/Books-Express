@@ -6,6 +6,7 @@ const nanoId = require('nanoid');
 var fs = require('fs');
 var htmlLinks = '<link rel="stylesheet" href="/stylesheets/style.css">';
 
+
 // var indexRouter = require('./routes/index');
 var userRouter = require('./routes/booksApi');
 // var booksRouter = require('./routes/books');
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'), { index: false }));
+
 
 
 app.use('/booksApi', userRouter);
@@ -51,8 +53,7 @@ app.get('/', (req, res, next) => {
     let printBooks = `<div><h1>Böckerna</h1>`;
     books.forEach(book => {
         printBooks += `
-    <div> ${book.bookName} <a href="/${book.id}">Låna</a></div>
-    `;
+    <div> ${book.bookName} <a href="/${book.id}">Låna</a></div>`;
     });
 
     printBooks += `<div><br><a id='addNewBok' href='/newBook'>Lägg till en ny book</a>
@@ -92,8 +93,9 @@ app.get('/:id', (req, res) => {
         <h3>${foundBook.author}</h3>
         <h3>${foundBook.pagesNr}</h3>
         <h3>${foundBook.rented ? "Uthyrd" : `
-       <button class='Btn' onclick = "location.href='/rentBook/${foundBook.id}'">Hyra</button></a>
+       <button class='Btn' onclick = "location.href='/rentBook/${foundBook.id}'">Hyra</button>
         `}</h3>
+        <button class='Btn'  onclick = "location.href='/deleteBok/${foundBook.id}'">Radera</button>
     </div>`;
     res.send(htmlLinks + bookInfo);
 });
@@ -111,6 +113,19 @@ app.get('/rentBook/:id', (req, res) => {
     fs.writeFileSync('./books.json', JSON.stringify(books, null, 2));
 
     res.send(htmlLinks + `<h3>Tack för din bestälning 😊 </h3>
+    <a href='/'><button class='Btn'>Start Sida</button></a>`);
+});
+app.get('/deleteBok/:id', (req, res) => {
+    let books = [];
+    if (fs.existsSync) {
+        books = JSON.parse(fs.readFileSync('./books.json'));
+    }
+    let foundBook = books.find((book) => book.id == req.params.id);
+    let bookIndex = books.findIndex((book) => book.id == req.params.id);
+    books.splice(bookIndex, 1);
+    fs.writeFileSync('./books.json', JSON.stringify(books, null, 2));
+
+    res.send(htmlLinks + `<h3>Nu booken ${foundBook.bookName} är raderat 😊 </h3>
     <a href='/'><button class='Btn'>Start Sida</button></a>`);
 });
 

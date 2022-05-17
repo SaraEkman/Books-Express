@@ -1,19 +1,5 @@
 [
   {
-    "bookName": "Det anstår mig icke att göra mig mindre än jag är och andra citat av kvinnor",
-    "author": "Josefine Stenersen Nilsson",
-    "pagesNr": "155",
-    "id": "jxyVBaXWPt3zyJ8K0xcQD",
-    "rented": false
-  },
-  {
-    "bookName": "Pixi adventskalender - Jan Lööf",
-    "author": "Annika Persson",
-    "pagesNr": "300",
-    "id": "QwXSjI_7NQmF9IspT_Y7V",
-    "rented": false
-  },
-  {
     "bookName": "Lilla barnkammarboken : sånger, rim och ramsor för hela kroppen",
     "author": "Annika Persson",
     "pagesNr": "200",
@@ -25,6 +11,13 @@
     "author": "Maja Hagerman",
     "pagesNr": "250",
     "id": "rfcwzIX2nqxDKZ-Fc-Y9K",
+    "rented": true
+  },
+  {
+    "bookName": "Det anstår mig icke att göra mig mindre än jag är och andra citat av kvinnor",
+    "author": "Josefine Stenersen Nilsson",
+    "pagesNr": "155",
+    "id": "jxyVBaXWPt3zyJ8K0xcQD",
     "rented": true
   }
 ]
