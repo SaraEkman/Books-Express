@@ -5,44 +5,10 @@ const EventEmitter = require('events');
 const nanoId = require('nanoid');
 const event = new EventEmitter();
 
-let books = [{
-    id: nanoId.nanoid(),
-    bookName: "Lilla barnkammarboken : sånger, rim och ramsor för hela kroppen", author: "Annika Persson", pagesNr: 200, rented: false
-}, {
-    id: nanoId.nanoid(),
-    bookName: "Det anstår mig icke att göra mig mindre än jag är och andra citat av kvinnor", author: "Josefine Stenersen Nilsson", pagesNr: 155, rented: false
-}, {
-    id: nanoId.nanoid(),
-    bookName: "Pixi adventskalender - Jan Lööf", author: "Annika Persson", pagesNr: 300, rented: false
-}, {
-    id: nanoId.nanoid(),
-    bookName: "MiniPixi säljförpackning 3", author: "Maja Hagerman", pagesNr: 250, rented: true
-}];
-
-
-
+//Testning 
 
 router.get('/', (req, res, next) => {
     console.log(books);
-    //     let lists;
-    //     for (let i = 0; i <a books.length; i++) {
-    //         if (!books[i].rented) {
-    //             lists += `<div>
-    //                         <h1>Bokens namn: ${books[i].bookname}</h1>
-    //                         <h2>Författaren: ${books[i].author}</h2>
-    //                         <h3>Antal blad: ${books[i].pagesnr}</h3>
-    //                         <div>Lägg till en ny book<a href='/books/newBook'></a></div>
-    //                     </div>`;
-    //         } else {
-    //             lists += `<div>
-    //                         <h1>Bokens namn: ${books[i].bookname}</h1>
-    //                         <h2>Den är utlånad :(</h2>
-    //                         <div>Lägg till en ny book<a href='/books/newBook'></a></div>
-    //                     </div>`;
-    //         }
-    //     }
-    // res.send(lists);
-
 
     let printBooks = `<div><h1>Böckerna</h1>`;
     books.forEach(book => {
@@ -109,27 +75,6 @@ router.post('/saveBooks', (req, res) => {
     books.push(newBook);
     res.redirect("/books");
 });
-
-
-// router.use(express.json())
-
-// router.post('/', (req, res) => {
-//     const { Name, lastName } = req.body
-//     console.log(Name, lastName);
-
-//     if (Name < 3) {
-//         res.status(400).json({
-//             status: "Failed",
-//             error: "Name must be more than 6 characters"
-//         })
-//     }
-
-//     // res.status(204).send("Tackar")
-//     res.status(201).json({
-//         status: "Created",
-//         Name,lastName,id:"12"
-//     });
-// })
 
 module.exports = router;
 

@@ -1,8 +1,50 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 16px 'Lucida Grande', Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
+}
+
+div {
+  margin-bottom: 0.6em; 
+}
+
+form {
+     display: flex;
+    flex-direction: column;
+      width: 50%;
+  max-width: 380px;
+     margin: auto;
+}
+
+form label {
+  margin-top: 1em;
+}
+
+form input {
+    padding: 8px;
+   border-radius: 5px 20px 5px;
+}
+
+.Btn {
+  background-color: #92d8f4;
+  font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+  padding: 8px;
+  border-radius: 5px 20px 5px;
+  background: #55dad3;
+  font-weight: bolder;
+  margin-top: 1em;
+}
+
+#addNewBok {
+  background: #1e2c2d;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  font-style: italic;
+  border-radius: 10px/30px;
+  padding: 4px;
+  font-weight: bolder;
 }

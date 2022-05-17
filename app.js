@@ -3,9 +3,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const nanoId = require('nanoid');
+var fs = require('fs');
+var htmlLinks = '<link rel="stylesheet" href="/stylesheets/style.css">';
 
 // var indexRouter = require('./routes/index');
-var userRouter = require('./routes/user');
+var userRouter = require('./routes/booksApi');
 // var booksRouter = require('./routes/books');
 
 var app = express();
@@ -14,33 +16,18 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public'),{index:false}));
+app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
 
-app.use('/user', userRouter);
+app.use('/booksApi', userRouter);
 // app.use('/books', booksRouter);
 
-
-
-let books = [{
-    id: nanoId.nanoid(),
-    bookName: "Lilla barnkammarboken : sånger, rim och ramsor för hela kroppen", author: "Annika Persson", pagesNr: 200, rented: false
-}, {
-    id: nanoId.nanoid(),
-    bookName: "Det anstår mig icke att göra mig mindre än jag är och andra citat av kvinnor", author: "Josefine Stenersen Nilsson", pagesNr: 155, rented: false
-}, {
-    id: nanoId.nanoid(),
-    bookName: "Pixi adventskalender - Jan Lööf", author: "Annika Persson", pagesNr: 300, rented: false
-}, {
-    id: nanoId.nanoid(),
-    bookName: "MiniPixi säljförpackning 3", author: "Maja Hagerman", pagesNr: 250, rented: true
-}];
-
-
-
-
 app.get('/', (req, res, next) => {
-    console.log(books);
+
+    let books = [];
+    if (fs.existsSync) {
+        books = JSON.parse(fs.readFileSync('./books.json'));
+    }
     //     let lists;
     //     for (let i = 0; i <a books.length; i++) {
     //         if (!books[i].rented) {
@@ -68,9 +55,12 @@ app.get('/', (req, res, next) => {
     `;
     });
 
-    printBooks += `<div><a href='/newBook'>Lägg till en ny book</a></div></div>`;
+    printBooks += `<div><br><a id='addNewBok' href='/newBook'>Lägg till en ny book</a>
+    <br><br>
+    <a id='addNewBok' href=/booksApi>Gå till BooksApi</a>
+    </div></div>`;
 
-    res.send(printBooks);
+    res.send(htmlLinks + printBooks);
 
 });
 
@@ -84,47 +74,61 @@ app.get('/newBook', (req, res) => {
                     <input type="text" name="author"/>
                     <label>Bokens sidor</label>
                     <input type="number" name="pagesNr"/>
-                    <button type="submit">Spara</button>
+                    <button class='Btn' type="submit">Spara</button>
                 </form>`;
-    res.send(form);
+    res.send(htmlLinks + form);
 });
 
 app.get('/:id', (req, res) => {
+    let books = [];
+    if (fs.existsSync) {
+        books = JSON.parse(fs.readFileSync('./books.json'));
+    }
     let foundBook = books.find((book) => book.id === req.params.id);
     if (!foundBook) { return res.send("Ingen Bok Hittades med Id " + req.params.id); }
-
     let bookInfo = `
     <div>
         <h3>${foundBook.bookName}</h3>
         <h3>${foundBook.author}</h3>
         <h3>${foundBook.pagesNr}</h3>
         <h3>${foundBook.rented ? "Uthyrd" : `
-       <button onclick = "location.href='/rentBook/${foundBook.id}'">Hyra</button></a>
+       <button class='Btn' onclick = "location.href='/rentBook/${foundBook.id}'">Hyra</button></a>
         `}</h3>
     </div>`;
-
-
-    res.send(bookInfo);
+    res.send(htmlLinks + bookInfo);
 });
 
 app.get('/rentBook/:id', (req, res) => {
+    let books = [];
+    if (fs.existsSync) {
+        books = JSON.parse(fs.readFileSync('./books.json'));
+    }
     let foundBook = books.find((book) => book.id == req.params.id);
     let bookIndex = books.findIndex((book) => book.id == req.params.id);
     let rentedBook = { ...foundBook, rented: true };
     books.splice(bookIndex, 1);
     books.push(rentedBook);
+    fs.writeFileSync('./books.json', JSON.stringify(books, null, 2));
 
-    res.send(`<h3>Tack för din bestälning 😊 </h3>
-    <a href='/'><button>Start Sida</button></a>
-    `);
+    res.send(htmlLinks + `<h3>Tack för din bestälning 😊 </h3>
+    <a href='/'><button class='Btn'>Start Sida</button></a>`);
 });
 
 
 app.post('/saveBooks', (req, res) => {
-    let newBook = { ...req.body, id: nanoId.nanoid(), rented: false };
+    let books = [];
+    if (fs.existsSync) {
+        books = JSON.parse(fs.readFileSync('./books.json'));
+    }
+    if (req.body.bookName === '' || req.body.author === '' || req.body.pagesNr === '') {
+        return res.send(htmlLinks + `Error 'Fel' Fyll i formuläret tack!<br><br><a href='/'><button class='Btn'>Start Sida</button></a>`);
+    } else {
+        let newBook = { ...req.body, id: nanoId.nanoid(), rented: false };
+        books.push(newBook);
+        fs.writeFileSync('./books.json', JSON.stringify(books, null, 2));
+        return res.redirect("/");
 
-    books.push(newBook);
-    res.redirect("/");
+    }
 });
 
 
