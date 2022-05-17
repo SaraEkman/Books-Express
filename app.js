@@ -89,9 +89,9 @@ app.get('/:id', (req, res) => {
     if (!foundBook) { return res.send("Ingen Bok Hittades med Id " + req.params.id); }
     let bookInfo = `
     <div>
-        <h3>${foundBook.bookName}</h3>
-        <h3>${foundBook.author}</h3>
-        <h3>${foundBook.pagesNr}</h3>
+        <h3>Bokens namn: ${foundBook.bookName}</h3>
+        <h3>Författaren: ${foundBook.author}</h3>
+        <h3>Antal sidor: ${foundBook.pagesNr}</h3>
         <h3>${foundBook.rented ? "Uthyrd" : `
        <button class='Btn' onclick = "location.href='/rentBook/${foundBook.id}'">Hyra</button>
         `}</h3>
